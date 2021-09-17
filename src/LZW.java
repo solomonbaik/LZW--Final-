@@ -90,9 +90,6 @@ public class LZW {
 			byteOutput[x+1] = (byte) compressed[x]; 
 			byteOutput[x] = (byte)(compressed[x]/256);
 
-			System.out.print(byteOutput[x] + ", ");
-			System.out.print(byteOutput[x+1] + ", ");
-			
 		}
 		//Print compressed/reformatted binary
 			for(byte b: byteOutput) {
@@ -111,7 +108,13 @@ public class LZW {
 		String uncompressedString;
 		Path fileName = Path.of(filename);
 		byte[] readByteArray = Files.readAllBytes(fileName);
-
+		//Print compressed/reformatted binary
+		System.out.println("Read in ByteArray");
+		for(byte b: readByteArray) {
+		String s1 = String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
+		System.out.println(s1);
+		}
+		
 		System.out.println("Read byteArray: " + Arrays.toString(readByteArray));
 		ArrayList<Integer> intList = new ArrayList<Integer>();
 		for(int i =0; i< readByteArray.length; i+=2) {
@@ -139,14 +142,13 @@ public class LZW {
 	public String decompressFromByteFile(String fileName) throws IOException {
 		ArrayList<Integer> intList = readFile(fileName);
 		System.out.println("IntList:" + intList.toString());
-		
 		String decompressed = decompressFromInput(intList);
-		System.out.println("decompressed:");
+		System.out.println("decompressed: ");
 		return decompressed;
 		
 	}
 	//decompresses from Array of ints (ex: [97,98,257])
-	public String decompressFromInput(ArrayList<Integer> compressedInput) {
+	public String decompressFromInput(List<Integer> compressedInput) {
 
 		int dictionarySize = 256;
 		Map<Integer,String> dictionary = buildDictionaryForDecompression(dictionarySize);
