@@ -49,10 +49,10 @@ public class LZW {
 	public String compress () throws UnsupportedEncodingException, FileNotFoundException, IOException
 	{
 		String output = ""; 
-		//int [] compressed = new int [1000]; 
-		int k = 0; 
-		int i = 0; 
-		int j = 2; 
+		//int [] compressed = new int [1000];//
+		int k = 0; //index in int[] compressed array.
+		int i = 0; //index in input text string.
+		int j = 2; //character length of the current + next string.
 		while (txt.length() != 0)
 		{
 			if (txt.length() <= i+j && dictionary.contains(txt.substring (i,txt.length())))
