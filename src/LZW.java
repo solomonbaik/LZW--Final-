@@ -4,6 +4,7 @@
 import java.util.*;
 
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
@@ -22,6 +23,8 @@ public class LZW {
 
 	private ArrayList <String>  dictionary = new ArrayList(1030) ; 
 	private String txt; 
+	public int [] compressed = new int [80000]; 
+	public List<Integer> derp = new ArrayList<Integer>(80000);
 
 	// reads a text file into a String and returns that String, throws an error if file cannot be inputed 
 	private void generateString (String fileNamer) throws IOException
@@ -46,7 +49,7 @@ public class LZW {
 	public String compress () throws UnsupportedEncodingException, FileNotFoundException, IOException
 	{
 		String output = ""; 
-		int [] compressed = new int [150]; 
+		//int [] compressed = new int [1000]; 
 		int k = 0; 
 		int i = 0; 
 		int j = 2; 
@@ -81,24 +84,31 @@ public class LZW {
 			}
 
 		}
-		System.out.println("compressed: "+ Arrays.toString(compressed));
-		System.out.println();
+		//System.out.println("compressed: "+ Arrays.toString(compressed));
+		//System.out.println();
 		
 		byte [] byteOutput = new byte [2*k]; 
 		for (int x = 0; x < 2*k; x=x+2)
 		{
-			byteOutput[x+1] = (byte) compressed[x]; 
+			byteOutput[x+1] = (byte) compressed[x];
 			byteOutput[x] = (byte)(compressed[x]/256);
 
 		}
+		String bin = "";
 		//Print compressed/reformatted binary
-			for(byte b: byteOutput) {
-			String s1 = String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
-			System.out.println(s1);
+			//for(byte b: byteOutput) {//
+			for(int n: compressed) { 
+			//String s1 = String.format("%8s", Integer.toBinaryString(b & 0xFF)).replace(' ', '0');//
+			bin = Integer.toBinaryString(0x10000 | n).substring(1);
+			//System.out.println("bint: " + bin);
+			//System.out.println(s1);
 			}
 			
 		Path file = Paths.get("output.byte");
-		Files.write(file, byteOutput);
+		FileWriter writer = new FileWriter ("output.byte");
+		writer.write(bin);
+		//Files.write(file, bin);//
+		writer.close();
 		return output; 
 	}
 	
